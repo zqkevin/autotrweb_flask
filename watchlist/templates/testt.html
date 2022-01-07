@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<p>我是测试页</p>
+
+<p>开始时间是{{x}}</p>
+<p id="star">点击下面的按钮，只要 i 小于 6 就一直循环代码块。</p>
+<button onclick="start(1)">点击这里</button>
+<button onclick="clearInterval(int)">停止</button>
+
+<table width="100%" align="center" id="demo">
+</table>
+<script>
+    var int;
+
+    function start(){
+        myFunction()
+        int = self.setInterval('myFunction()',60000);
+
+    }
+
+    function myFunction(){
+	    var request = new XMLHttpRequest();
+        request.open("get", "http://127.0.0.1:5000/test2");
+        request.send();
+        request.onload = function () {
+            var returninfo = JSON.parse(request.responseText);
+
+            var mticks = request.responseText;
+            ht(returninfo);
+
+        }
+}
+    function ht(mts){
+        var html = '';
+        html += '<tr class="titfont">'
+        html += '<th>开始时间</th>/n'
+        html += '<th>开盘价格</th>'
+        html += '<th>振幅</th>'
+        html += '<th>成交量</th>'
+        html += '</tr>'
+        for (var dd in mts) {
+            var mt = mts[dd];
+            if (mt.zhenfu < 0) {
+                html += '<tr class="tabtxt1">'
+            } else {
+                html += ' <tr class="tabtxt">'
+            }
+            html += '<td>'+mt.openTime+'</td>';
+            html += '<td>'+mt.open+'</td>';
+            html += '<td>'+mt.zhenfu+'</td>';
+            html += '<td>'+mt.numTrades+'</td>';
+            html += '</tr>';
+        };
+        document.getElementById('demo').innerHTML = html;
+
+    }
+    function time(){
+        var d=new Date();
+        var t=d.toLocaleTimeString();
+        document.getElementById("demo").innerHTML = t;
+}
+</script>
+
+</body>
+{% endblock %}

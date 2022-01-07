@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<form name="ordervalue" style="margin-bottom: 10px" method="POST">
+    <fieldset>
+        <legend>订单交易信息</legend>
+        <input type="date" name="sdate" required>
+        <button type="submit" formaction="{{url_for('orders')}}" style="margin-left:100px">查询</button>
+    </fieldset>
+</form>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr align="center" >
+        <td class="biaoti">订单信息</td>
+    </tr>
+</table>
+<table width="100%" align="center">
+    <tr class="titfont">
+        <th>交易时间</th>
+        <th>交易价格</th>
+        <th>交易方向</th>
+        <th>交易量</th>
+        <th>盈亏USDT</th>
+    </tr>
+    {% for mtick in info %}
+    {% if mtick.fig < 0 %}
+    <tr class="tabtxt1">
+    {% else %}
+    <tr class="tabtxt">
+    {% endif %}
+        <td>{{mtick.ordertime }}</td>
+        <td>{{mtick.avgprice }}</td>
+        <td>{{mtick.side}}%</td>
+        <td>{{mtick.origqty}}</td>
+        <td>{{mtick.fig}}</td>
+    </tr>
+    {% endfor %}
+    <tr class="titfont">
+        <th>本日总交易{{coun}}次</th>
+        <th></th>
+        <th></th>
+        <th>本日盈亏为:</th>
+        <th>{{figsum}}(USDT)</th>
+    </tr>
+</table>
+<img alt="Walking Totoro" class="totoro" src="{{ url_for('static', filename='images/totoro.gif') }}" title="to~to~ro~">
+{% endblock %}
