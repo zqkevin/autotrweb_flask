@@ -1,8 +1,14 @@
+html {
+    width: 100%;
+    background-size: 100%;
+    background-image: url('../images/ethb.gif');
+}
 body {
     margin: auto;
-    max-width: 580px;
+    max-width: 640px;
     font-size: 14px;
     font-family: Helvetica, Arial, sans-serif;
+
 }
 .biaoti{
 	font-family: 微软雅黑;
@@ -41,6 +47,7 @@ body {
 }
 .avatar {
     width: 40px;
+
 }
 
 nav ul {
@@ -153,6 +160,9 @@ input[name=year] {
 }
 
 footer {
+    position: fixed ;
+    bottom: 50px;
+    width: 640px;
     color: #888;
     margin-top: 15px;
     text-align: center;

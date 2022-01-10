@@ -2,7 +2,7 @@
 import time
 import click
 from datetime import datetime
-from watchlist import app, db
+from watchlist import app, db, models
 from watchlist.models import User, Movie , Ethusdt1m, Orders
 from watchlist.scrip import binance,command
 import socket
@@ -53,21 +53,19 @@ def forge():
 
 @app.cli.command()
 @click.option('--username', prompt=True, help='The username used to login.')
-@click.option('--password', prompt=True, hide_input=True, confirmation_prompt=True, help='The password used to login.')
+@click.option('--password', prompt=True, hide_input=False, confirmation_prompt=True, help='The password used to login.')
 def admin(username, password):
-    """Create user."""
-    db.create_all()
-
-    user = User.query.first()
+    wbuser = models.User
+    user = wbuser.query.filter(wbuser.username==username).first()
     if user is not None:
-        click.echo('Updating user...')
-        user.username = username
-        user.set_password(password)
+        click.echo('更新用户')
+        wbuser.username = username
+        wbuser.set_password(password)
     else:
-        click.echo('Creating user...')
-        user = User(username=username, name='Admin')
-        user.set_password(password)
-        db.session.add(user)
+        click.echo('新增用户')
+        wbuser = User(username=username, name='Guest')
+        wbuser.set_password(password)
+        db.session.add(wbuser)
 
     db.session.commit()
     click.echo('Done.')

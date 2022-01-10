@@ -5,13 +5,13 @@ from datetime import datetime
 from watchlist import db
 import time
 
-class Webuser(db.Model, UserMixin):
-    #__bind_key__ = 'angsql'
+class User(db.Model, UserMixin):
+
+    __tablename__ = 'webuser'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
     username = db.Column(db.String(20))
     password_hash = db.Column(db.String(128))
-
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -20,12 +20,12 @@ class Webuser(db.Model, UserMixin):
 
 
 class Movie(db.Model):
-    #__bind_key__ = 'angsql'
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(60))
     year = db.Column(db.String(4))
 
-class User(db.Model):
+class Anguser(db.Model):
     __tablename__ = 'user'
     __bind_key__ = 'angsql'
     id = db.Column(db.Integer, primary_key=True)

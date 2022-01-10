@@ -27,18 +27,21 @@ def index():
         return redirect(url_for('index'))
 
     movies = Movie.query.all()
-
+    # testuser = User.get_id()
+    # print('testuser=', testuser)
     return render_template('index.html', movies=movies)
 @app.route('/binan',methods=['GET','POST'])
 def binan():
-    if request.method == 'POST':
-        info = request.values.to_dict()
-        r, s = binance.getstick(limit=10, starttime=info['opentime'], symbol=info['symbol'])
-        return render_template('binan.html', mticks=r, symbol=s)
+    # if request.method == 'POST':
+    #     info = request.values.to_dict()
+    #     r, s = binance.getstick(limit=10, starttime=info['opentime'], symbol=info['symbol'])
+    #     return render_template('binan.html', mticks=r, symbol=s)
+    #
+    # r, s = binance.getstick(limit=10)
+    # r.reverse()
 
-    r, s = binance.getstick(limit=10)
-    r.reverse()
-    return render_template('binan.html', mticks=r, symbol=s)
+    #return render_template('binan.html', mticks=r, symbol=s)
+    return render_template('binan.html')
 
 @app.route('/playvideo/<movie_name>', methods = ['GET','POST'])
 @login_required
@@ -97,52 +100,85 @@ def settings():
     return render_template('settings.html')
 
 @app.route('/orders',methods=['GET',"POST"])
+@login_required
 def orders():
-    if request.method == 'POST':
-        info = request.form['sdate']
-        info = datetime.strptime(info,'%Y-%m-%d')
-        order = Orders.query.filter(extract('year', Orders.ordertime) == info.year,
-                                   extract('month', Orders.ordertime) == info.month,
-                                   extract('day', Orders.ordertime) == info.day,
-                                    Orders.userid == 1).all()
-        order.reverse()
-        coun = len(order)
-        figsum = 0
-        for o in order:
-            figsum = figsum + o.fig
-        figsum = round(figsum,2)
-        return render_template('orders.html', info=order, coun=coun, figsum=figsum)
-    today = datetime.now()
-    order = Orders.query.filter(extract('year', Orders.ordertime) == today.year,
-                                   extract('month', Orders.ordertime) == today.month,
-                                   extract('day', Orders.ordertime) == today.day,
-                                Orders.userid == 1).all()
-    order.reverse()
-    coun = len(order)
-    figsum = 0
-    for o in order:
-        figsum = figsum + o.fig
-    figsum = round(figsum, 2)
-    return render_template('orders.html',info=order,coun=coun,figsum=figsum)
+    try:
+        if request.method == 'POST':
+            if current_user.is_authenticated:
+                userid = current_user.id
+                info = request.form['sdate']
+                info = datetime.strptime(info,'%Y-%m-%d')
+                order = Orders.query.filter(extract('year', Orders.ordertime) == info.year,
+                                           extract('month', Orders.ordertime) == info.month,
+                                           extract('day', Orders.ordertime) == info.day,
+                                            Orders.userid == userid).all()
+                if order:
+                    order.reverse()
+                    coun = len(order)
+                    figsum = 0
+                    for o in order:
+                        figsum = figsum + o.fig
+                    figsum = round(figsum,2)
+                    return render_template('orders.html', info=order, coun=coun, figsum=figsum)
+            else:
+                return render_template('orders.html', info=None, coun=None, figsum=None)
+        today = datetime.now()
+        userid = current_user.id
+        if userid:
+            order = Orders.query.filter(extract('year', Orders.ordertime) == today.year,
+                                       extract('month', Orders.ordertime) == today.month,
+                                       extract('day', Orders.ordertime) == today.day,
+                                    Orders.userid == userid).all()
+        else:
+            return redirect(url_for('login'))
+        if order:
+            order.reverse()
 
+            coun = len(order)
+            figsum = 0
+            for o in order:
+                figsum = figsum + o.fig
+            figsum = round(figsum, 2)
+            return render_template('orders.html', info=order, coun=coun, figsum=figsum)
+        else:
+            return render_template('orders.html', info=None, coun=None, figsum=None)
+    except:
+        flash('获取失败，请刷新页面重试')
+        return render_template('orders.html', info=None, coun=None, figsum=None)
+@app.route('/test', methods=['GET', 'POST'])
+def test():
+    #a = User.get_id(user)
+
+    a = current_user
+    if a.is_anonymous:
+        a = '游客'
+
+    else:
+        a = a.id
+    return render_template('test.html', a=a)
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
+        remember = request.args.get('remenber')
+        if remember:
+            remember = True
+        else:
+            remember = False
         if not username or not password:
-            flash('Invalid input.')
+            flash('无效的 username 或 password.')
             return redirect(url_for('login'))
 
         user = User.query.filter_by(username=username).first()
-        if username == user.username and user.validate_password(password):
-            login_user(user)
-            flash('Login success.')
-            return redirect(url_for('index'))
-
-        flash('Invalid username or password.')
-        return redirect(url_for('login'))
+        try:
+            if username == user.username and user.validate_password(password):
+                login_user(user, remember=remember)
+                flash('登录成功')
+                return redirect(url_for('index'))
+        except:
+            flash('用户名或密码不正确')
+            return redirect(url_for('login'))
 
     return render_template('login.html')
 

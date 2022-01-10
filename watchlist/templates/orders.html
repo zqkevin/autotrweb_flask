@@ -7,39 +7,68 @@
         <button type="submit" formaction="{{url_for('orders')}}" style="margin-left:100px">查询</button>
     </fieldset>
 </form>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr align="center" >
-        <td class="biaoti">订单信息</td>
-    </tr>
-</table>
+{% if info %}
+<div style="display: flex;">
+    <div>账户信息</div>
+    <table>
+        <tr>
+            <td>资金总额</td>
+            <td>{{info[0].amount}}</td>
+        </tr>
+        <tr>
+            <td>持仓量</td>
+            <td>{{info[0].pos_ccl}}ETH</td>
+            <td>持仓价</td>
+            <td>{{info[0].pos_ccj}}</td>
+        </tr>
+    </table>
+</div>
+{% else %}
+<div style="display: flex;">
+    <div>账户信息</div>
+    <table>
+        <tr>
+            <td>资金总额</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>持仓量</td>
+            <td>0</td>
+            <td>持仓价</td>
+            <td>0</td>
+        </tr>
+    </table>
+</div>
+{% endif %}
 <table width="100%" align="center">
+    <tr class="titfont">
+        <th>本日总交易{{coun}}次</th>
+        <th></th>
+        <th></th>
+        <th>本日盈亏为:</th>
+        <th>{{figsum}} USDT</th>
+    </tr>
     <tr class="titfont">
         <th>交易时间</th>
         <th>交易价格</th>
         <th>交易方向</th>
         <th>交易量</th>
-        <th>盈亏USDT</th>
+        <th>盈亏</th>
     </tr>
+    {% if info %}
     {% for mtick in info %}
-    {% if mtick.fig < 0 %}
+    {% if mtick.side == 'BUY' or mtick.side == 'buy' %}
     <tr class="tabtxt1">
     {% else %}
     <tr class="tabtxt">
     {% endif %}
         <td>{{mtick.ordertime }}</td>
         <td>{{mtick.avgprice }}</td>
-        <td>{{mtick.side}}%</td>
+        <td>{{mtick.side}}</td>
         <td>{{mtick.origqty}}</td>
         <td>{{mtick.fig}}</td>
     </tr>
     {% endfor %}
-    <tr class="titfont">
-        <th>本日总交易{{coun}}次</th>
-        <th></th>
-        <th></th>
-        <th>本日盈亏为:</th>
-        <th>{{figsum}}(USDT)</th>
-    </tr>
+    {% endif %}
 </table>
-<img alt="Walking Totoro" class="totoro" src="{{ url_for('static', filename='images/totoro.gif') }}" title="to~to~ro~">
 {% endblock %}
