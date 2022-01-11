@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<form name="ordervalue" style="margin-bottom: 10px" method="POST">
+<form name="ordervalue" style="margin-bottom: 10px; width: 90%; color: white" method="POST">
     <fieldset>
         <legend>订单交易信息</legend>
         <input type="date" name="sdate" required>
@@ -8,34 +8,34 @@
     </fieldset>
 </form>
 {% if info %}
-<div style="display: flex;">
-    <div>账户信息</div>
-    <table>
+<div style="display: flex; justify-content: space-between;padding: 10px;color: #d5f7ff">
+    <div style="width: 20%; font-size: 20px">账户信息</div>
+    <table style="width: 80%; font-size: 15px">
         <tr>
-            <td>资金总额</td>
-            <td>{{info[0].amount}}</td>
+            <td>资金总额:</td>
+            <td>{{info[0].amount}}  USDT</td>
         </tr>
         <tr>
-            <td>持仓量</td>
-            <td>{{info[0].pos_ccl}}ETH</td>
-            <td>持仓价</td>
-            <td>{{info[0].pos_ccj}}</td>
+            <td>持仓量:</td>
+            <td>{{info[0].pos_ccl}}  ETH</td>
+            <td>持仓价:</td>
+            <td>{{info[0].pos_ccj}} ETH/USDT</td>
         </tr>
     </table>
 </div>
 {% else %}
-<div style="display: flex;">
-    <div>账户信息</div>
-    <table>
+<div style="display: flex; justify-content: space-between;padding: 10px;color: #d5f7ff">
+    <div style="width: 20%;;font-size: 20px">账户信息</div>
+    <table style="width: 80%">
         <tr>
-            <td>资金总额</td>
-            <td>0</td>
+            <td>资金总额:</td>
+            <td>0  USDT</td>
         </tr>
         <tr>
-            <td>持仓量</td>
-            <td>0</td>
-            <td>持仓价</td>
-            <td>0</td>
+            <td>持仓量:</td>
+            <td>0  ETH</td>
+            <td>持仓价:</td>
+            <td>0 ETH/USDT</td>
         </tr>
     </table>
 </div>
@@ -57,7 +57,7 @@
     </tr>
     {% if info %}
     {% for mtick in info %}
-    {% if mtick.side == 'BUY' or mtick.side == 'buy' %}
+    {% if mtick.fig < 0 %}
     <tr class="tabtxt1">
     {% else %}
     <tr class="tabtxt">

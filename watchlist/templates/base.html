@@ -9,14 +9,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
     {% endblock %}
 </head>
-<body style="min-height: 1024px; background-color: #e9faff">
+<body>
     {% for message in get_flashed_messages() %}
         <div class="alert">{{ message }}</div>
     {% endfor %}
-    <div style="width: 100%">
-        <img style="float: left; padding-right: 20px" alt="Avatar" class="avatar" src="{{ url_for('static', filename='images/BTC.png') }}">
+    <div style="width: 100%;display: flex">
+        <img style="width: 50px;height: 50px;margin-top:10px;margin-left: 15px" alt="Avatar" class="avatar" src="{{ url_for('static', filename='images/BTC.png') }}">
         {% if current_user.is_authenticated %}
-        <h2 style="padding-top: 10px; color: #dddd00">
+        <h2 style="color: #dddd00;margin-left: 20px">
                 {{ current_user.name }} 的自动机器人
         </h2>
         {% else %}

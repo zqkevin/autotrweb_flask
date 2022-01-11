@@ -1,24 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div style="display: flex; width: 100%;background-color: #3A7734">
+<div style="display: flex;justify-content: space-between; width: 100%;background: rgba(2,3,4,0.3)">
 
-<form style="background-color: #3c3c3c" method="post">
-    <h3 style="width: 100%">Login</h3>
-    Username<br>
+<form style="color: #e9faff;" method="post">
+    <h3 style="width: 90%; text-align: center">会员登录</h3>
+    Username:<br>
     <input type="text" name="username" required><br><br>
-    Password<br>
-
+    Password:<br>
     <input type="password" name="password" required><br><br>
-
 
     <input type="checkbox" name="remenber" >记住登录<br>
     <br><br>
-    <input class="btn" type="submit" name="submit" value="登录">
+    <input style="margin-left: 30%; width: 50%" class="btn" type="submit" name="submit" value="登录">
 </form>
 
-<div style="text-align: center;background-color: #4b1818; margin-right: 50px">
-    <h3>未注册用户点击这里<a href=""></a>注册</h3>
+<div class="border-box">
+    <h3>未注册用户点击这里注册</h3>
 </div>
 </div>
 {% endblock %}
