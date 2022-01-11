@@ -129,19 +129,19 @@ def orders():
                                        extract('month', Orders.ordertime) == today.month,
                                        extract('day', Orders.ordertime) == today.day,
                                     Orders.userid == userid).all()
+            if order:
+                order.reverse()
+                coun = len(order)
+                figsum = 0
+                for o in order:
+                    figsum = figsum + o.fig
+                figsum = round(figsum, 2)
+                return render_template('orders.html', info=order, coun=coun, figsum=figsum)
+            else:
+                return render_template('orders.html', info=None, coun=None, figsum=None)
         else:
             return redirect(url_for('login'))
-        if order:
-            order.reverse()
 
-            coun = len(order)
-            figsum = 0
-            for o in order:
-                figsum = figsum + o.fig
-            figsum = round(figsum, 2)
-            return render_template('orders.html', info=order, coun=coun, figsum=figsum)
-        else:
-            return render_template('orders.html', info=None, coun=None, figsum=None)
     except:
         flash('获取失败，请刷新页面重试')
         return render_template('orders.html', info=None, coun=None, figsum=None)
@@ -175,7 +175,7 @@ def login():
             if username == user.username and user.validate_password(password):
                 login_user(user, remember=remember)
                 flash('登录成功')
-                return redirect(url_for('index'))
+                return redirect(url_for('orders'))
         except:
             flash('用户名或密码不正确')
             return redirect(url_for('login'))
