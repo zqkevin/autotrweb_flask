@@ -3,9 +3,8 @@ from datetime import datetime
 from sqlalchemy import extract
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user, current_user
-from watchlist.scrip import binance #command
 from watchlist import app, db
-from watchlist.models import User, Movie, Orders
+from watchlist.models import User, Movie, Orders, Anguser
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -85,27 +84,87 @@ def delete(movie_id):
 @login_required
 def settings():
     if request.method == 'POST':
-        name = request.form['name']
+        try:
+            userid = current_user.id
+            set = int(request.args.get('set'))
 
-        if not name or len(name) > 20:
-            flash('Invalid input.')
-            return redirect(url_for('settings'))
-
-        user = User.query.first()
-        user.name = name
-        db.session.commit()
-        flash('Settings updated.')
-        return redirect(url_for('index'))
-
+            if set == 1:
+                name = request.form['name']
+                if not name or len(name) > 20:
+                    flash('名字不能大于10')
+                    return redirect(url_for('settings'))
+                password = request.form['password']
+                if not password or len(password) < 6 or len(password) > 20:
+                    flash('密码需要大于6')
+                    return redirect(url_for('settings'))
+                wbuser = User.query.filter(User.id == userid).first()
+                wbuser.username = name
+                wbuser.set_password(password)
+                db.session.commit()
+                flash('修改成功,请重新登录')
+                logout_user()
+                return redirect(url_for('index'))
+            elif set == 2:
+                apikey = request.form['apikey']
+                ptchance = request.form['ptchance']
+                secrekey = request.form['secrekey']
+                passphrase = request.form['passphrase']
+                user = Anguser.query.filter(Anguser.userid == userid).first()
+                if user:
+                    user.pt_api_key = apikey
+                    user.pt_secret_key = secrekey
+                    user.pt_name = ptchance
+                    user.pt_passphrase = passphrase
+                    db.session.commit()
+                    flash('平台设置成功')
+                    return redirect(url_for('index'))
+                else:
+                    wbuser = User.query.filter(User.id == userid).first()
+                    user = Anguser(userid=wbuser.id, name=wbuser.name, username=wbuser.username, pt_api_key=apikey,
+                                   pt_secret_key=secrekey, pt_name=ptchance, pt_passphrase=passphrase)
+                    db.session.add(user)
+                    db.session.commit()
+                    flash('平台设置成功')
+                    return render_template('usermanageusermanage.html', a=user, b='touru')
+            elif set == 3:
+                user = Anguser.query.filter(Anguser.userid == userid).first()
+                if user:
+                    touru = request.form['touru']
+                    fengxian = request.form['fengxian']
+                    user.touru = touru
+                    user.fengxian = fengxian
+                    db.session.commit()
+                    flash('机器人设置成功')
+                    return redirect(url_for('index'))
+                else:
+                    flash('请先进行平台设置')
+                    return render_template('usermanageusermanage.html', a=user, b='touru')
+        except Exception as e:
+            print('err')
     return render_template('settings.html')
 
 @app.route('/orders',methods=['GET',"POST"])
 @login_required
 def orders():
     try:
+        userid = current_user.id
+        user = Anguser.query.filter(Anguser.userid == userid).first()
+        if user:
+            if user.pt_flag == 1:
+                if user.pt_api_key and user.pt_secret_key:
+                    run = 1
+                else:
+                    flash('请在设置里设置平台参数')
+                    run = 0
+            else:
+                run = 0
+        else:
+            flash('请在设置里设置平台参数')
+            return redirect(url_for('settings'))
+            run = 0
         if request.method == 'POST':
-            if current_user.is_authenticated:
-                userid = current_user.id
+            set = int(request.args.get('set'))
+            if set == 1:
                 info = request.form['sdate']
                 info = datetime.strptime(info,'%Y-%m-%d')
                 order = Orders.query.filter(extract('year', Orders.ordertime) == info.year,
@@ -114,14 +173,22 @@ def orders():
                                             Orders.userid == userid).all()
                 if order:
                     order.reverse()
-                    coun = len(order)
+                    coun = round((order[0].amount - order[0].acc_wsx),2)
                     figsum = 0
-                    for o in order:
-                        figsum = figsum + o.fig
-                    figsum = round(figsum,2)
-                    return render_template('orders.html', info=order, coun=coun, figsum=figsum)
-            else:
-                return render_template('orders.html', info=None, coun=None, figsum=None)
+                    for a in order:
+                        figsum = a.fig + figsum
+                    return render_template('orders.html', info=order, coun=coun, figsum=figsum, run=run)
+                else:
+                    return render_template('orders.html', info=None, coun=None, figsum=0, run=run)
+            elif set == 2:
+                zt = request.form['zt']
+                if zt == 'run':
+                    user.pt_flag = 1
+                else:
+                    user.pt_flag = 0
+                db.session.commit()
+                flash('更改状态成功!')
+                return redirect(url_for('orders'))
         today = datetime.now()
         userid = current_user.id
         if userid:
@@ -131,31 +198,90 @@ def orders():
                                     Orders.userid == userid).all()
             if order:
                 order.reverse()
-                coun = len(order)
+                coun = round((order[0].amount - order[0].acc_wsx),2)
                 figsum = 0
-                for o in order:
-                    figsum = figsum + o.fig
-                figsum = round(figsum, 2)
-                return render_template('orders.html', info=order, coun=coun, figsum=figsum)
+                for a in order:
+                    figsum = a.fig + figsum
+                return render_template('orders.html', info=order, coun=coun, figsum=figsum, run=run)
             else:
-                return render_template('orders.html', info=None, coun=None, figsum=None)
+                return render_template('orders.html', info=None, coun=None, figsum=0, run=run)
         else:
             return redirect(url_for('login'))
 
-    except:
+    except Exception as e:
         flash('获取失败，请刷新页面重试')
-        return render_template('orders.html', info=None, coun=None, figsum=None)
-@app.route('/test', methods=['GET', 'POST'])
-def test():
-    #a = User.get_id(user)
-
-    a = current_user
-    if a.is_anonymous:
-        a = '游客'
-
+        return render_template('orders.html', info=None, coun=None, figsum=0, run=0)
+@app.route('/usermanage', methods=['GET', 'POST'])
+def usermanage():
+    if current_user.admin == 1:
+        webuser = User.query.filter().all()
     else:
-        a = a.id
-    return render_template('test.html', a=a)
+        webuser = User.query.filter(User.recom == current_user.id)
+    if request.method == 'POST':
+        flag = request.args.get('flag')
+        if flag == '1':
+            userid = request.form['userid']
+            today = datetime.now()
+            order = Orders.query.filter(extract('year', Orders.ordertime) == today.year,
+                                        extract('month', Orders.ordertime) == today.month,
+                                        extract('day', Orders.ordertime) == today.day,
+                                        Orders.userid == userid).all()
+            if order:
+                order.reverse()
+                order = order[0]
+                order.name = User.query.filter(User.id == userid).first().name
+                return render_template('usermanage.html', webuser=webuser, order=order)
+            else:
+                return render_template('usermanage.html', webuser=webuser, order=None, userid=userid)
+        elif flag == '2':
+            userid = request.form['userid']
+            if userid == current_user.id:
+                flash('不能删除自己')
+                return redirect(url_for('usermanage'))
+            else:
+                user = User.query.filter(User.id == userid).first()
+                db.session.delete(user)
+                anguser = Anguser.query.filter(Anguser.userid == userid).first()
+                if anguser:
+                    db.session.delete(anguser)
+                    db.session.commit()
+                else:
+                    db.session.commit()
+                flash('删除成功!')
+                return redirect(url_for('usermanage'))
+
+        elif flag == '3':
+            recom = current_user.id
+            name = request.form['name']
+            username = request.form['username']
+            password = request.form['password']
+            wbuser = User(username=username, name=name, recom=recom)
+            wbuser.set_password(password)
+            db.session.add(wbuser)
+            db.session.commit()
+            adduser = User.query.filter(User.username == username)
+            if adduser:
+                flash('新增成功')
+                return redirect(url_for('usermanage'))
+            else:
+                flash('新增失败,稍后再试!')
+                return redirect(url_for('usermanage'))
+    userid = current_user.id
+    today = datetime.now()
+    order = Orders.query.filter(extract('year', Orders.ordertime) == today.year,
+                                extract('month', Orders.ordertime) == today.month,
+                                extract('day', Orders.ordertime) == today.day,
+                                Orders.userid == userid).all()
+    if order:
+        order.reverse()
+        order = order[0]
+        order.name = User.query.filter(User.id == userid).first().name
+        return render_template('usermanage.html', webuser=webuser, order=order)
+    else:
+        return render_template('usermanage.html', webuser=webuser, order=None, userid=userid)
+
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -173,11 +299,19 @@ def login():
         user = User.query.filter_by(username=username).first()
         try:
             if username == user.username and user.validate_password(password):
-                login_user(user, remember=remember)
-                flash('登录成功')
-                return redirect(url_for('orders'))
+                if user.admin == 1:
+                    login_user(user, remember=remember, admin=True)
+                    flash('登录成功')
+                    return redirect(url_for('orders'))
+                else:
+                    login_user(user, remember=remember)
+                    flash('登录成功')
+                    return redirect(url_for('orders'))
+            else:
+                flash('用户名或密码不正确')
+                return redirect(url_for('login'))
         except:
-            flash('用户名或密码不正确')
+            flash('网络故障')
             return redirect(url_for('login'))
 
     return render_template('login.html')
@@ -189,3 +323,4 @@ def logout():
     logout_user()
     flash('Goodbye.')
     return redirect(url_for('index'))
+

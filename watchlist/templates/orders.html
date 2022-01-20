@@ -1,32 +1,34 @@
 {% extends 'base.html' %}
 {% block content %}
-<form name="ordervalue" style="width: 95%; color: white" method="POST">
+<form name="quire" style="width: 95%; color: white" method="POST">
     <fieldset>
-        <legend>订单交易信息</legend>
+        <legend>订单查询</legend>
         <input type="date" name="sdate" required>
-        <button type="submit" formaction="{{url_for('orders')}}" style="margin-left:100px">查询</button>
+        <button type="submit" formaction="{{url_for('orders')}}?set=1" style="margin-left:100px">查询</button>
     </fieldset>
 </form>
-{% if info %}
-<div style="display: flex; justify-content: space-between;padding: 10px;color: #d5f7ff">
-    <div style="width: 20%; font-size: 15px">账户信息</div>
-    <table style="width: 80%; font-size: 10px">
+<form name="ordervalue" style="width: 95%; color: white" method="POST">
+    {% if info %}
+    <fieldset>
+        <legend style="font-size: 15px">账户信息: {{coun}} USDT</legend>
+        <table style="width: 100%; font-size: 13px">
         <tr>
-            <td>资金总额:</td>
-            <td>{{info[0].amount}} USDT</td>
+            <td>浮动盈亏:</td>
+            <td>{{info[0].acc_wsx}} USDT</td>
+
         </tr>
         <tr>
             <td>持仓量:</td>
             <td>{{info[0].pos_ccl}} ETH</td>
             <td>持仓价:</td>
-            <td>{{info[0].pos_ccj}} ETH/USDT</td>
+            <td>{{info[0].pos_ccj}} </td>
         </tr>
-    </table>
-</div>
-{% else %}
-<div style="display: flex; justify-content: space-between;padding: 10px;color: #d5f7ff">
-    <div style="width: 20%;;font-size: 20px">账户信息</div>
-    <table style="width: 80%">
+        </table>
+    </fieldset>
+    {% else %}
+    <fieldset>
+        <legend>账户信息: 总额 0</legend>
+        <table style="width: 100%">
         <tr>
             <td>资金总额:</td>
             <td>0  USDT</td>
@@ -37,16 +39,37 @@
             <td>持仓价:</td>
             <td>0 ETH/USDT</td>
         </tr>
-    </table>
-</div>
-{% endif %}
+        </table>
+    </fieldset>
+    {% endif %}
+    <div style="display: flex; justify-content:space-between; margin-top: 10px;width: 80%">
+    {% if run == 1 %}
+        <div style="display: flex">
+        <i style="width: 20px; height: 20px; border-radius: 50%;background-color: green;display: block;margin-top: 10px"></i>
+        <h3 style="margin-left: 10px;margin-bottom: 10px">正在运行中..</h3>
+        </div>
+        <button type="submit" formaction="{{url_for('orders')}}?set=2" style="margin-top: 10px;height: 25px" name="zt" value="stop">停止</button>
+    {% else %}
+        <div style="display: flex">
+        <i style="width: 20px; height: 20px; border-radius: 50%;background-color: red;display: block;margin-top: 10px"></i>
+        <h3 style="margin-left: 10px">已经停止运行</h3>
+        </div>
+        <button type="submit" formaction="{{url_for('orders')}}?set=2" style="margin-top: 10px;height: 25px" name="zt" value="run">开始</button>
+    {% endif %}
+    </div>
+
+</form>
+{% if info %}
 <table width="100%" align="center">
     <tr class="titfont">
-        <th>本日总交易{{coun}}次</th>
-        <th></th>
+        {% if info %}
+        <th>本日总交易{{info|length}}次</th>
+        {% else %}
+        <th>本日总交易 次</th>
+        {% endif %}
         <th></th>
         <th>本日盈亏为:</th>
-        <th>{{figsum}} USDT</th>
+        <th>{{figsum|round(2)}} USDT</th>
     </tr>
     <tr class="titfont">
         <th>交易时间</th>
@@ -71,4 +94,5 @@
     {% endfor %}
     {% endif %}
 </table>
+{% endif %}
 {% endblock %}

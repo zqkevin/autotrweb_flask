@@ -11,7 +11,9 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
     username = db.Column(db.String(20))
+    admin = db.Column(db.Integer,default=0)
     password_hash = db.Column(db.String(128))
+    recom = db.Column(db.Integer)
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -37,12 +39,14 @@ class Anguser(db.Model):
     analy2 = db.Column(db.Integer, default=0)
     share = db.Column(db.Integer, default=100)
     pt_name = db.Column(db.String(128))
-    pt_flag = db.Column(db.Integer)
+    pt_flag = db.Column(db.Integer, default=0)
     pt_api_key = db.Column(db.String(128))
     pt_secret_key = db.Column(db.String(128))
     pt_passphrase = db.Column(db.String(128))
     pt_other = db.Column(db.String(128))
     flag = db.Column(db.Integer, default=1)
+    touru = db.Column(db.Integer,default=10)
+    fengxian = db.Column(db.Integer,default=5)
 
 
 

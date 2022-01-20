@@ -1,9 +1,61 @@
-{% extends 'base.html' %}
 
+{% extends 'base.html' %}
 {% block content %}
-<h3>Settings</h3>
-<form method="post">
-    Your Name <input type="text" name="name" autocomplete="off" required value="{{ current_user.name }}">
-    <input class="btn" type="submit" name="submit" value="Save">
+<style type="text/css">
+    form{
+        width: 95%;
+        color: white;
+        display: flex;
+
+    }
+    fieldset{
+        padding: 10px
+    }
+    legend{
+        color: lightyellow;
+    }
+    div{
+        margin-top: 10px;
+    }
+</style>
+<h3>设置</h3>
+
+<form name="accset"  method="POST">
+    <fieldset>
+        <legend>账户设置</legend>
+        <div>登录名</div>
+        <input type="text" name="name" required>
+        <div>密码</div>
+        <input type="text" name="password" required>
+        <button type="submit" formaction="{{url_for('settings')}}?set=1" style="margin-left:100px">修改</button>
+    </fieldset>
+</form>
+<form name="ptset"  method="POST">
+    <fieldset>
+        <legend>平台设置</legend>
+        <div>选择平台:</div>
+        <select name="ptchance">
+            <option value="bianace">Bianace</option>
+            <option value="okex">Okex</option>
+        </select>
+
+        <div>Apikey:</div>
+        <input type="text" name="apikey" required>
+        <div>Secretkey:</div>
+        <input type="text" name="secrekey" required>
+        <div>Passphrase:</div>
+        <input type="text" name="passphrase" >
+        <button type="submit" formaction="{{url_for('settings')}}?set=2" style="margin-left:100px">设置</button>
+    </fieldset>
+</form>
+<form name="robotset" method="POST">
+    <fieldset>
+        <legend>机器人设置</legend>
+        <div>投入比例1~10:</div>
+        <input type="text" name="touru" value="10">
+        <div>风险系数1~10:</div>
+        <input type="text" name="fengxian" value="5" >
+        <button type="submit" formaction="{{url_for('settings')}}?set=3" style="margin-left:100px">修改</button>
+    </fieldset>
 </form>
 {% endblock %}

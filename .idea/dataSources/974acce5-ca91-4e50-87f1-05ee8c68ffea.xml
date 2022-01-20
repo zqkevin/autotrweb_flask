@@ -998,11 +998,22 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Position>3</Position>
       <DataType>varchar(20)|0s</DataType>
     </column>
-    <column id="292" parent="284" name="password_hash">
+    <column id="292" parent="284" name="admin">
       <Position>4</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>0</DefaultExpression>
+    </column>
+    <column id="293" parent="284" name="password_hash">
+      <Position>5</Position>
       <DataType>varchar(128)|0s</DataType>
     </column>
-    <key id="293" parent="284" name="PRIMARY">
+    <column id="294" parent="284" name="recom">
+      <Position>6</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="295" parent="284" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
