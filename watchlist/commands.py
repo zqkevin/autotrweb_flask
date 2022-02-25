@@ -4,7 +4,7 @@ import click
 from datetime import datetime
 from watchlist import app, db, models
 from watchlist.models import User, Movie , Ethusdt1m, Orders
-from watchlist.scrip import binance,command
+from watchlist.scrip import bian,command
 import socket
 import struct
 
@@ -36,7 +36,7 @@ def forge():
     for m in movies:
         movie = Movie(title=m['title'], year=m['year'], filename=m['filename'])
         db.session.add(movie)
-    res = binance.getstick()[0]
+    res = bian.getstick()[0]
     for r in res:
         eth = Ethusdt1m(opentime=r.openTime, openpr=r.open, hightpr=r.high, lowpr=r.low, closepr=r.close,
                         bustur=r.quoteAssetVolume, closetime=r.closeTime, busvolu=r.numTrades, busnum=r.volume,
@@ -80,7 +80,7 @@ def geteth1m():
         while (now - last).seconds > 3600 or (now - last).days > 0:
             starttime = int(last.timestamp()*1000) + 1
             endtime = int(now.timestamp()*1000)
-            res = binance.getstick(starttime=starttime,endtime=endtime,limit=600)
+            res = bian.getstick(starttime=starttime, endtime=endtime, limit=600)
             coun = len(res)
             for r in res:
 

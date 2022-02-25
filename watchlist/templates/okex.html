@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container-fluid p-4 mb-1 bg-light">
-    <p>把资金放在自己的币安合约账户上，通过生成API KEY密匙，使用本交易模型自动对账户上的资金进行增资交易。<br>
+    <p>把资金放在自己的欧易现货账户上，通过生成API KEY密匙，使用本交易模型自动对账户上的资金进行增资交易。<br>
     交易模型只对账户资金进行交易，并无转出功能权限，如停止运行，需手动对持仓进行处理。
     </p>
     <p class="h5">交易情况</p>
@@ -13,13 +13,12 @@
     <p class="display-6 text-center">操作步骤：</p>
     <p class="h6"  data-bs-toggle="collapse" data-bs-target="#api">一、设置API</p>
     <div id="api" class="collapse">
-        <img src="../static/images/bianapi1.gif" alt="bianapi">
-        <p>打开<a href="https://www.binance.com/zh-CN/activity/referral-entry?fromActivityPage=true&ref=LIMIT_VLTBBZ1T">币安官网</a>，登录后，鼠标移动到右上角个人账户上，在弹出窗口中点击“API管理”</p>
-        <img src="../static/images/bianapi2.gif" alt="bianapi">
-        <p>输入标签后，点击创建API</p>
-        <img src="../static/images/bianapi3.gif" alt="bianapi">
-        <p>1、记录下API Key 和 Secret Key,用于绑定账户到交易模型</p>
-        <p>2、点击右上角的编辑，然后勾选允许现货及杠杆交易，和合约交易，其他不用勾选</p>
+        <img src="../static/images/okexapi1.gif" alt="bianapi">
+        <p>打开<a href="https://www.ouyicn.photo/join/12043196">欧易官网</a>，登录后，鼠标移动到右上角个人账户上，在弹出窗口中点击“API”</p>
+        <p>点击”申请V5 API“</p>
+        <img src="../static/images/okexapi2.gif" alt="bianapi">
+        <p>1、点击交易权限，然后设置密码，输入平台验证后，点击确认</p>
+        <p>2、记录下API Key 和 Secret Key,用于绑定账户到交易模型</p>
         <p>3、点击保存即可，<mark>Secret Key之后无法看到，所以必须先记录再保存</mark></p>
     </div>
 
@@ -30,6 +29,7 @@
         <img src="../static/images/set2.gif" alt="set2">
         <p>选择对应的平台，一个账户只能选择一个平台绑定，重复绑定只有最后一个生效</p>
         <p>输入在平台上记录的APIKEY，和Secretkey。</p>
+        <p>passphrase是在平台申请API时候设定的密码</p>
         <p>点击绑定，系统自动对接平台进行测试，如果正确则绑定成功</p>
     </div>
     <p class="h6"  data-bs-toggle="collapse" data-bs-target="#run">三、开始运行</p>

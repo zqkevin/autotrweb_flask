@@ -1,23 +1,95 @@
+<style type="text/css">
+  #box{
+    display: -webkit-flex;
+    max-height:150px;
+    overflow: scroll;
+
+  }
+  .slide{
+    display: block;
+    margin-right: 50px;
+    padding: 5px;
+  }
+  img.boxm{
+    width:240px;
+    height:120px;
+    border-radius: 1em;
+  }
+
+</style>
 {% extends 'base.html' %}
 
 {% block content %}
-<p>{{ movies|length }} Titles</p>
-
-<ul class="movie-list">
-    {% for movie in movies %}
-    <li>{{ movie.title }} - {{ movie.year }}
-        <span class="float-right">
-            {% if current_user.is_authenticated %}
-            <a class="btn" href="{{ url_for('edit', movie_id=movie.id) }}">Edit</a>
-            <form class="inline-form" method="post" action="{{ url_for('delete', movie_id=movie.id) }}">
-                <input class="btn" type="submit" name="delete" value="Delete" onclick="return confirm('Are you sure?')">
-            </form>
-            {% endif %}
-            <a class="imdb" href="{{url_for('play', movie_name=movie.filename) }}" title="Play this movie">IMDb</a>
-        </span>
-    </li>
-
+<div class="container-fluid text-white p-4 mb-1" style="background-image: url(../static/images/index_bg.jpg); background-size: 100% 100%">
+  <h1>谷歌AI学习算法</h1>
+  <h3>200万条以上历史数据建模</h3>
+  <h5>双均线策略+指数增强+高频交易策略+...</h5>
+  <p>6个月以上实盘测试</p>
+</div>
+<div class="mb-1" style="min-height: 100px">
+<h5 class="ms-4">市场现价（USD）：</h5>
+  <table class="table">
+    <thead>
+      <tr style="font-size: 0.9em">
+        <th>货币：</th>
+        <th>升跌幅：</th>
+        <th>最高价：</th>
+        <th>最低价：</th>
+        <th>价格：</th>
+      </tr>
+    </thead>
+    <tbody style="font-size: 0.8em">
+    {% if info %}
+    {% for mtick in info %}
+    {% if mtick['priceChangePercent'] > 0 %}
+    <tr style="color: brown">
+    {% else %}
+    <tr style="color: darkolivegreen">
+    {% endif %}
+        <td>{{mtick['symbol']}}</td>
+        <td>{{mtick['priceChangePercent'] }}%</td>
+        <td>{{mtick['highPrice']}}</td>
+        <td>{{mtick['lowPrice']}}</td>
+        <td>{{mtick['lastPrice']}}</td>
+    </tr>
     {% endfor %}
-</ul>
+    {% endif %}
+    </tbody>
 
+  </table>
+</div>
+<div class="bg-dark p-2" id="box">
+  <div class="slide">
+    <a href="https://www.binance.com/zh-CN/activity/referral-entry?fromActivityPage=true&ref=LIMIT_VLTBBZ1T">
+      <img class="boxm" src="../static/images/binance.png" alt="binance">
+    </a>
+  </div>
+  <div class="slide">
+    <a href="https://www.ouyicn.photo/join/12043196">
+      <img class="boxm" src="../static/images/OKEx.jpg" alt="okex" >
+    </a>
+  </div>
+  <div class="slide">
+    <a href="">
+      <img class="boxm" src="../static/images/hr.jpg" alt="Healthy Wealth">
+    </a>
+  </div>
+</div>
+<div id="aa" class="container-fluid p-4 mb-1 bg-light">
+  <p class="text-center display-6">基本原理</p>
+  <p class="h5">预测目标的选择</p>
+  <p>“波动”是市场存在的首要元素，没有波动的市场是无法长久存在的。在有限的资源下，进行趋势的判断非常困难。那么怎么能在控制风险的情况下能进行盈利？
+    进行一定的预测是唯一的方法。
+  </p>
+  <p>预测的准则是：在相同的资源下预测的准确性和变化量成反比。也就是变化越小，时间越短，预测越容易。所有的价格市场变化的波动曲线都类似下图：</p>
+  <p></p>
+  <img src="../static/images/price.gif" alt="price" style="width: 100%">
+  <p>根据原则，对变化幅度小，变化时间短进行预测，如图中三个区域，在很短的时间内出现比较小的价格波动。</p>
+  <P>这就要求高频率跟踪价格变化，并迅速进行交易。采用计算机自动进行是最好的方法</P>
+  <p class="h5">历史数据的分析</p>
+  <p>计算机AI的学习系统，可以对大量的历史数据进行分析，并随着新数据的加入而不断实时调整预测模型的系数</p>
+  <p>分析的维度包括交易量，价格幅度，单位变化等等，并需要剔除重大外界因素的影响。</p>
+  <p class="h5">策略的使用</p>
+  <p>对AI建立的模型分析后的结果，进行各种交易策略的结合和优化。尽可能的降低风险，稳定获取利润。</p>
+</div>
 {% endblock %}
