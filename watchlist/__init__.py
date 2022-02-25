@@ -12,7 +12,7 @@ from flask_bootstrap import Bootstrap5
 app = Flask(__name__)
 bootstrap = Bootstrap5(app)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:pety&93033@127.0.0.1:3306/richmak'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:pety93033@127.0.0.1:3306/richmak'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_BINDS'] = {'angsql':'mysql://autotr:pety93033@43.133.11.104:3306/autotr'}
 

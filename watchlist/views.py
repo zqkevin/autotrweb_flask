@@ -481,7 +481,7 @@ def login():
         user = User.query.filter_by(username=username).first()
         try:
             if username == user.username and user.validate_password(password):
-                if user.admin == 1:
+                if user.admin == 1 or user.admin == 2:
                     login_user(user, remember=remember, admin=True)
 
                     return redirect(url_for('index'))

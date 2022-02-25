@@ -43,7 +43,7 @@
         <div class="offcanvas-body">
             <ul class="navbar-nav">
                 {% if current_user.is_authenticated %}
-                {% if current_user.admin > 0 %}
+                {% if current_user.admin != 0 %}
                 <li class='nav-item'><a class="nav-link" href="{{ url_for('settings') }}">账户设置</a></li>
                 <li class='nav-item'><a class="nav-link" href="{{ url_for('edit') }}">运行设置</a></li>
                 <li class='nav-item'><a class="nav-link" href="{{url_for('orders')}}">交易情况</a></li>
@@ -89,7 +89,7 @@
     <div class="collapse navbar-collapse " id="navbarSupportedContent">
        <ul class="navbar-nav">
                 {% if current_user.is_authenticated %}
-                {% if current_user.admin > 0 %}
+                {% if current_user.admin != 0 %}
                 <li class='nav-item'><a class="nav-link" href="{{ url_for('settings') }}">账户设置</a></li>
                 <li class='nav-item'><a class="nav-link" href="{{ url_for('edit') }}">运行设置</a></li>
                 <li class='nav-item'><a class="nav-link" href="{{url_for('orders')}}">交易情况</a></li>
@@ -111,12 +111,11 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="collapse" data-bs-target="#plan4">模式二（无交易账户）</a>
                     <ul class="collapse bg-light border-0" id="plan4">
-                        <li><a class="dropdown-item" href="#">链接</a></li>
-                        <li><a class="dropdown-item" href="#">另一个链接</a></li>
-                        <li><a class="dropdown-item" href="#">第三个链接</a></li>
+                        <li><a class="dropdown-item" href="{{url_for('public')}}">公共账户托管</a></li>
+                        <li><a class="dropdown-item" href="{{url_for('subacc')}}">使用子账户</a></li>
                     </ul>
                 </li>
-                <li class='nav-item'><a class="nav-link" href="{{ url_for('index') }}">说明</a></li>
+                <li class='nav-item'><a class="nav-link" href="{{ url_for('explain') }}">说明</a></li>
                 <li class='nav-item'><a class="nav-link" href="{{ url_for('demo') }}">示范案例</a></li>
                 {% endif %}
             </ul>
