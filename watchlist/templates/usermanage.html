@@ -1,53 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
-<style type="text/css">
-    form{
-        width: 95%;
-        color: white;
-        display: flex;
-        justify-content: right;
-    }
-    fieldset{
-        padding: 10px;
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: space-around;
-    }
-    legend{
-        color: lightyellow;
 
-    }
-    div{
-        margin-top: 10px;
-    }
-    input{
-        width: 50%;
-    }
-</style>
-<head>
-    <meta charset="UTF-8">
-    <title>it's test</title>
-</head>
-<body style="color: white">
+<div class="m-4 p-2 rounded-3 border border-1 border-primary shadow">
 <form method="POST">
-<fieldset>
-    <legend>所属账户</legend>
+    <div class="p-1 w-100 border-bottom border-dark border-2 bg-light">关联账户：</div>
     {% for a in webuser %}
+    <div class="border-bottom border-secondary border-1">
+        <button type="submit" class="btn text-info" formaction="{{url_for('usermanage')}}?flag=1" name="userid" value="{{a.id}}">{{a.name}}</button>
+    </div>
 
-        <button type="submit" formaction="{{url_for('usermanage')}}?flag=1" name="userid" value="{{a.id}}">{{a.name}}</button>
     {% endfor %}
-
-</fieldset>
+    </table>
 </form>
+    <div type=""></div>
+</div>
+<div class="m-2 p-2 rounded-3 border border-1 border-secondary">
 {% if order %}
 <form method="POST">
-<fieldset>
-        <legend style="font-size: 15px">账户: {{order.name}} 总额: {{order.amount}} USDT</legend>
+        <legend style="font-size: 15px">账户: {{order.name}}    总额: {{order.amount}} USDT</legend>
         <table style="width: 100%; font-size: 13px">
             <tr>
                 <td>更新时间:</td>
                 <td>{{order.ordertime}}</td>
-
             </tr>
             <tr>
                 <td>浮动盈亏:</td>
@@ -62,27 +36,36 @@
                 <td>{{order.pos_ccj}} </td>
             </tr>
         </table>
-</fieldset>
-    <button type="submit" style="width: 20%; margin-left: 70%" formaction="{{url_for('usermanage')}}?flag=2" name="userid" value="{{order.userid}}">删除</button>
+
+    <button type="submit" class="btn btn-primary mt-2 ms-auto" formaction="{{url_for('usermanage')}}?flag=2" name="userid" value="{{order.userid}}">删除</button>
 </form>
 {% else %}
 <form method="POST">
 <h2>该账户近期没有运行</h2>
-<button type="submit" style="width: 20%; margin-left: 70%" formaction="{{url_for('usermanage')}}?flag=2" name="userid" value="{{userid}}">删除</button>
+<button type="submit" class="btn btn-primary mt-2 ms-auto" formaction="{{url_for('usermanage')}}?flag=2" name="userid" value="{{order.userid}}">删除</button>
 </form>
 {% endif %}
-<form method="POST">
-<fieldset style="flex-flow: column">
-    <legend>增加用户</legend>
+</div>
+
+
+
+<div class="d-grid my-4">
+    <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#adduser">增加用户</button>
+</div>
+<div id="adduser" class="mx-4 p-2 rounded-3 border border-1 border-secondary collapse">
+    <form method="POST">
     <div>用户名</div>
     <input type="text" name="name" required>
     <div>登录名</div>
     <input type="text" name="username" required>
     <div>密码</div>
     <input type="text" name="password" required>
-    <button style="margin-top: 10px; width: 20%" type="submit" formaction="{{url_for('usermanage')}}?flag=3" >添加用户</button>
-</fieldset>
-</form>
+        <div class="row m-2 w-90">
+            <div class="col flex-grow-1"></div>
+            <button class="col btn btn-warning" type="submit" formaction="{{url_for('usermanage')}}?flag=3" >确定添加</button>
+        </div>
+    </form>
+</div>
 </body>
 </html>
 {% endblock %}

@@ -3,7 +3,6 @@ import click
 from datetime import datetime
 from watchlist import app, db
 from watchlist.models import User, Movie , Ethusdt1m
-from watchlist.scrip.binance import getstick
 import socket
 import struct
 

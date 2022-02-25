@@ -11,8 +11,9 @@ Werkzeug==2.0.2
 matplotlib
 pandas
 numpy
-requests
 gunicorn
-websocket
 apscheduler
 mysqlclient
+bootstrap-flask
+binance-futures-connector
+

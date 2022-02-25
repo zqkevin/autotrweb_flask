@@ -11,16 +11,13 @@
 <div class="m-2 p-3 rounded-3 border border-1 border-muted ">
     <form method="POST" class=" bd-highlight d-flex">
         <input type="date" name="sdate"  required>
-        <button type="submit" class="ms-auto btn btn-outline-primary" formaction="{{url_for('orders')}}?set=1">查询</button>
+        <button type="submit" class="ms-auto btn btn-outline-primary" formaction="{{url_for('demo')}}?set=1">查询</button>
     </form>
 </div>
 
 <div class="m-2 p-3 rounded-3 border border-1 border-muted ">
     {% if info %}
     <p class="h5">{{info[0].ordertime.month}}月统计</p>
-    <div class="row">
-        <div class="col">账户: {{name}}</div>
-    </div>
     <div class="row">
         <div class="">月盈亏为：{{mfig}} USDT</div>
     </div>
@@ -31,9 +28,11 @@
 <div class="m-2 p-3 rounded-3 border border-1 border-muted ">
     {% if info %}
     <p class="h5">{{info[0].ordertime.month}}月{{info[0].ordertime.day}}日统计</p>
-
     <div class="row">
-        <div class="col">资金额: {{coun}} USDT</div>
+        <div class="col">账户: {{coun}} USDT</div>
+    </div>
+    <div class="row">
+        <div class="col">浮动盈亏: {{info[0].acc_wsx}}</div>
     </div>
     <div class="row">
         <div class="col">持仓量: {{info[0].pos_ccl}}</div>

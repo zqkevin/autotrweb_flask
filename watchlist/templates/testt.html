@@ -2,17 +2,30 @@
 {% block content %}
 <p>我是测试页</p>
 
-<p>开始时间是{{x}}</p>
+<p id="demo">开始时间是111</p>
 <p id="star">点击下面的按钮，只要 i 小于 6 就一直循环代码块。</p>
-<button onclick="start(1)">点击这里</button>
+<button  onclick="ok(1)">点击这里</button>
 <button onclick="clearInterval(int)">停止</button>
 
-<table width="100%" align="center" id="demo">
+<table width="100%" align="center" id="demo1">
 </table>
-<script>
-    var int;
 
-    function start(){
+<script type="text/javascript">
+    function ok(a){
+        alert('koko!')
+        if(a==1){
+            document.getElementById('demo').className = "invisible";
+        }else {
+            $('demo').append('bbb')
+        }
+    }
+    var int;
+    function test(){
+        var html = '<p>开始时间是256</p>'
+
+        document.getElementById('demo').innerHTML = html;
+    }
+    function start(i){
         myFunction()
         int = self.setInterval('myFunction()',60000);
 
@@ -60,6 +73,4 @@
         document.getElementById("demo").innerHTML = t;
 }
 </script>
-
-</body>
 {% endblock %}

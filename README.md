@@ -1,6 +1,6 @@
 # Watchlist
 
-Example application for flask tutorial "[Flask 入门教程](https://helloflask.com/tutorial)".
+Example application for flask tutorial "[Flask 入门说明](https://helloflask.com/tutorial)".
 
 Demo: http://watchlist.helloflask.com
 
