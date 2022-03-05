@@ -1,6 +1,6 @@
 import requests
 import json
-url = 'http://127.0.0.1:8000'
+url = 'http://43.133.11.104'
 def getuserstatu(uid):
     if not isinstance(uid, str):
         uid = str(uid)
@@ -24,7 +24,8 @@ def getuser(uid):
             return True, info['message']
         return False, info['message']
     return False
-
+a = getuser(1)
+print('d')
 def rootset(uid,lever,fengxian):
     if not isinstance(uid, str):
         uid = str(uid)
