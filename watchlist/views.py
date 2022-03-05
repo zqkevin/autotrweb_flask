@@ -2,7 +2,6 @@
 from datetime import datetime
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user, current_user
-from sqlalchemy import extract
 from watchlist import app, db
 from watchlist.models import User, Movie
 from watchlist.scrip import bian, command
@@ -12,10 +11,8 @@ from watchlist.scrip import bian, command
 def index():
     if current_user.is_authenticated:
         logined = 1
-        role = current_user.admin
     else:
-        logined = 0
-        role = 0
+        return redirect(url_for('demo'))
     king = ['ETH', 'BTC', 'DOGE']
     info = []
     for i in king:
@@ -28,6 +25,7 @@ def index():
         info = False
     return render_template('index.html', info=info)
 @app.route('/explain',methods=['GET', 'POST'])
+@login_required
 def explain():
     # if current_user.is_authenticated:
     #     return render_template('binan.html')
@@ -35,6 +33,7 @@ def explain():
     # return redirect(url_for('login'))
     return render_template('explain.html')
 @app.route('/binan',methods=['GET', 'POST'])
+@login_required
 def binan():
     # if current_user.is_authenticated:
     #     return render_template('binan.html')
@@ -42,6 +41,7 @@ def binan():
     # return redirect(url_for('login'))
     return render_template('binan.html')
 @app.route('/okex',methods=['GET', 'POST'])
+@login_required
 def okex():
     # if current_user.is_authenticated:
     #     return render_template('binan.html')
@@ -49,6 +49,7 @@ def okex():
     # return redirect(url_for('login'))
     return render_template('okex.html')
 @app.route('/subacc', methods = ['GET','POST'])
+@login_required
 def subacc():
     return render_template('subacc.html')
 
@@ -160,6 +161,16 @@ def demo():
     userid = 5
     try:
         today = datetime.now()
+        king = ['ETH', 'BTC', 'DOGE']
+        mk = []
+        for i in king:
+            x = bian.getprice(i)
+            if x:
+                x["priceChangePercent"] = float(x["priceChangePercent"])
+                x['symbol'] = x['symbol'].split('USD')[0]
+                mk.append(x)
+        if not mk:
+            mk = False
         if request.method == 'POST':
             info = request.form['sdate']
             info = datetime.strptime(info, '%Y-%m-%d')
@@ -182,7 +193,7 @@ def demo():
         if figs:
             for t in figs[1]:
                 mfig = mfig + t
-        return render_template('demo.html', info=orders, coun=coun, figsum=dfig, mfig=mfig, month=info.month)
+        return render_template('demo.html', info=orders, coun=coun, figsum=dfig, mfig=mfig, month=info.month, mk=mk)
     except Exception as e:
         flash('获取失败，请刷新页面重试')
         return render_template('demo.html', info=None, coun=None, figsum=0, run=0)
@@ -221,6 +232,7 @@ def orders():
         return render_template('orders.html', info=None, coun=None, figsum=0, run=0)
 
 @app.route('/public', methods=['GET', 'POST'])
+@login_required
 def public():
     return render_template('public.html')
 @app.route('/usermanage', methods=['GET', 'POST'])

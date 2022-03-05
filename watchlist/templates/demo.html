@@ -8,6 +8,38 @@
 </style>
 {% extends 'base.html' %}
 {% block content %}
+<div class="text-primary" style="min-height: 100px; margin-top: 1em">
+<h5 class="ms-auto mt-1 ">市场现价（USD）：</h5>
+  <table class="table">
+    <thead>
+      <tr style="font-size: 0.9em">
+        <th>货币：</th>
+        <th>升跌幅：</th>
+        <th>最高价：</th>
+        <th>最低价：</th>
+        <th>价格：</th>
+      </tr>
+    </thead>
+    <tbody style="font-size: 0.8em">
+    {% if mk %}
+    {% for mtick in mk %}
+    {% if mtick['priceChangePercent'] > 0 %}
+    <tr style="color: brown">
+    {% else %}
+    <tr style="color: darkolivegreen">
+    {% endif %}
+        <td>{{mtick['symbol']}}</td>
+        <td>{{mtick['priceChangePercent'] }}%</td>
+        <td>{{mtick['highPrice']}}</td>
+        <td>{{mtick['lowPrice']}}</td>
+        <td>{{mtick['lastPrice']}}</td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    </tbody>
+
+  </table>
+</div>
 <div class="m-2 p-3 rounded-3 border border-1 border-muted ">
     <form method="POST" class=" bd-highlight d-flex">
         <input type="date" name="sdate"  required>
