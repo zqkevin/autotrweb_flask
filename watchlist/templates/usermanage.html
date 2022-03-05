@@ -5,8 +5,9 @@
 <form method="POST">
     <div class="p-1 w-100 border-bottom border-dark border-2 bg-light">关联账户：</div>
     {% for a in webuser %}
-    <div class="border-bottom border-secondary border-1">
-        <button type="submit" class="btn text-info" formaction="{{url_for('usermanage')}}?flag=1" name="userid" value="{{a.id}}">{{a.name}}</button>
+    <div class="border-bottom border-secondary border-1 row mx-auto" style="width:85%">
+        <div class="col-9 align-self-center">{{a.name}}</div>
+        <button type="submit" class="col-3 btn text-info" formaction="{{url_for('usermanage')}}?flag=1" name="userid" value="{{a.id}}">详情</button>
     </div>
 
     {% endfor %}
@@ -14,43 +15,49 @@
 </form>
     <div type=""></div>
 </div>
-<div class="m-2 p-2 rounded-3 border border-1 border-secondary">
 {% if order %}
+<div class="m-2 p-2 rounded-3 border border-1 border-secondary">
 <form method="POST">
-        <legend style="font-size: 15px">账户: {{order.name}}    总额: {{order.amount}} USDT</legend>
+        <legend style="font-size: 15px">账户: {{order.name}}</legend>
         <table style="width: 100%; font-size: 13px">
             <tr>
-                <td>更新时间:</td>
-                <td>{{order.ordertime}}</td>
-            </tr>
-            <tr>
-                <td>浮动盈亏:</td>
-                <td>{{order.acc_wsx}} USDT</td>
-                <td>市场价:</td>
-                <td>{{order.avgprice}}</td>
+                <td>总额:</td>
+                <td>{{order.totalcapital}} USDT</td>
+                <td>总盈亏:</td>
+                <td>{{order.totalpl}} USDT</td>
             </tr>
             <tr>
                 <td>持仓量:</td>
-                <td>{{order.pos_ccl}} ETH</td>
+                <td>{{order.ccl}} ETH</td>
                 <td>持仓价:</td>
-                <td>{{order.pos_ccj}} </td>
+                <td>{{order.ccp}} </td>
             </tr>
         </table>
-
-    <button type="submit" class="btn btn-primary mt-2 ms-auto" formaction="{{url_for('usermanage')}}?flag=2" name="userid" value="{{order.userid}}">删除</button>
+    <div class="mt-1em" style="width:100%; margin-top: 1em">
+<button class="btn btn-primary" style="margin-left: 70%" type="button" data-bs-toggle="offcanvas" data-bs-target="#deluser">
+  删除用户
+</button>
+    </div>
 </form>
+</div>
 {% else %}
-<form method="POST">
-<h2>该账户近期没有运行</h2>
-<button type="submit" class="btn btn-primary mt-2 ms-auto" formaction="{{url_for('usermanage')}}?flag=2" name="userid" value="{{order.userid}}">删除</button>
-</form>
 {% endif %}
+
+<div class="offcanvas offcanvas-top w-80 h-60" id="deluser">
+  <div class="offcanvas-header">
+    <h1 class="offcanvas-title">用户删除</h1>
+<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <p>用户一经删除将不能恢复，所有账户信息将删除</p>
+    <p>确定要删除请点击删除按钮</p>
+    <button type="submit" class="btn btn-primary mt-2 ms-auto" formaction="{{url_for('usermanage')}}?flag=2" name="userid" value="{{order.userid}}">删除</button>
+  </div>
 </div>
 
 
-
-<div class="d-grid my-4">
-    <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#adduser">增加用户</button>
+<div class="d-grid my-4 mx-auto" style="width: 60%">
+    <button type="button" class="btn btn-outline-primary " data-bs-toggle="collapse" data-bs-target="#adduser">增加用户</button>
 </div>
 <div id="adduser" class="mx-4 p-2 rounded-3 border border-1 border-secondary collapse">
     <form method="POST">

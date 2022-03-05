@@ -11,29 +11,25 @@
 <div class="m-2 p-3 rounded-3 border border-1 border-muted ">
     <form method="POST" class=" bd-highlight d-flex">
         <input type="date" name="sdate"  required>
-        <button type="submit" class="ms-auto btn btn-outline-primary" formaction="{{url_for('orders')}}?set=1">查询</button>
+        <button type="submit" class="ms-auto btn btn-outline-primary" formaction="{{url_for('demo')}}?set=1">查询</button>
     </form>
 </div>
 
 <div class="m-2 p-3 rounded-3 border border-1 border-muted ">
-    {% if info %}
-    <p class="h5">{{info[0].ordertime.month}}月统计</p>
+    {% if mfig %}
+    <p class="h5">{{month}}月统计</p>
     <div class="row">
-        <div class="col">账户: {{name}}</div>
-    </div>
-    <div class="row">
-        <div class="">月盈亏为：{{mfig}} USDT</div>
+        <div class="">月盈亏为：{{mfig|round(2)}} USDT</div>
     </div>
     {% else %}
-    <div>获取数据失败！</div>
+    <div>本月无交易</div>
     {% endif %}
 </div>
 <div class="m-2 p-3 rounded-3 border border-1 border-muted ">
     {% if info %}
-    <p class="h5">{{info[0].ordertime.month}}月{{info[0].ordertime.day}}日统计</p>
-
+    <p class="h5">{{info[0]['ordertime'][6]}}月{{info[0]['ordertime'][8:10]}}日统计</p>
     <div class="row">
-        <div class="col">资金额: {{coun}} USDT</div>
+        <div class="col">账户: {{coun}} USDT</div>
     </div>
     <div class="row">
         <div class="col">持仓量: {{info[0].pos_ccl}}</div>
@@ -44,7 +40,7 @@
         <div class="col-7">盈亏为：{{figsum|round(2)}} USDT</div>
     </div>
     {% else %}
-    <div>获取数据失败！</div>
+    <div>本日无交易</div>
     {% endif %}
 </div>
 
@@ -52,9 +48,9 @@
 <table class="table" align="center">
     <thead>
     <tr class="table-secondary">
-        <th class="col-4">交易时间</th>
+        <th class="col-3">交易时间</th>
         <th class="col-2">价格</th>
-        <th class="col-1">方向</th>
+        <th class="col-2">方向</th>
         <th class="col-3">交易量</th>
         <th class="col-2">盈亏</th>
     </tr>
@@ -62,19 +58,19 @@
 
     {% if info %}
     {% for mtick in info %}
-    {% if mtick.side == 'BUY' %}
+    {% if mtick.side == 'BUY' or mtick.side == 'buy' %}
         <tr class="table-info">
     {% else %}
         <tr class="">
     {% endif %}
-    <td>{{mtick.ordertime }}</td>
+    <td>{{mtick.ordertime[11::]}}</td>
     <td>{{mtick.avgprice }}</td>
     <td>{{mtick.side}}</td>
     <td>{{mtick.origqty}}</td>
     {% if mtick.fig < 0 %}
-        <td class="table-danger">{{mtick.fig}}</td>
+        <td class="table-danger">{{mtick.fig|round(2)}}</td>
     {% else %}
-        <td class="table-success">{{mtick.fig}}</td>
+        <td class="table-success">{{mtick.fig|round(2)}}</td>
     {% endif %}
     </td>
     </tr>

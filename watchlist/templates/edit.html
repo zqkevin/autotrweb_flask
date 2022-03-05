@@ -5,14 +5,14 @@
 <div class="m-4 p-3 rounded-3 border border-1 border-primary shadow ">
     <form method="POST" class="">
         <div class="row d-flex justify-content-center mx-3">
-            <label for="touru" class="form-label mt-4">设置杠杆倍数(1-20)：</label>
-            <input type="text" class="form-control" id="touru" placeholder="现在是'{{usertouru}}'倍" value="{{usertouru}}" name="touru">
+            <label for="lever" class="form-label mt-4">设置杠杆倍数(1-20)：</label>
+            <input type="text" class="form-control" id="lever" placeholder="现在是'{{userlever}}'倍" value="{{userlever}}" name="lever">
             <label for="fengxian" class="form-label mt-4">设置止损比例(1-10)</label>
             <input type="text" class="form-control" id="fengxian" placeholder="现在为{{userfengxian}}" value="{{userfengxian}}" name="fengxian">
         </div>
         <div class="row mt-4">
             <div class=" d-flex flex-row-reverse w-100 ">
-                <button type="submit" class="btn btn-primary" formaction="{{url_for('edit')}}?set=1">修改</button>
+                <button type="submit" class="btn btn-primary" formaction="{{url_for('edit')}}?set=2">修改</button>
             </div>
         </div>
     </form>
@@ -27,7 +27,7 @@
         </div>
         <div class="row mt-4">
             <div class=" d-flex flex-row-reverse w-100 ">
-                <button type="submit" class="btn btn-primary" formaction="{{url_for('edit')}}?set=2" name="zt"
+                <button type="submit" class="btn btn-primary" formaction="{{url_for('edit')}}?set=1" name="zt"
                         value="stop">停止
                 </button>
             </div>
@@ -35,17 +35,16 @@
 
         {% else %}
         <div class="row w-100 ">
-            <span class="spinner-border text-danger mx-5" style="width: 2em; height: 2em"></span>
+            <span class="spinner-grow text-danger mx-5" style="width: 2em; height: 2em"></span>
             <h3 class="col">已经停止运行</h3>
         </div>
         <div class="row mt-4">
             <div class=" d-flex flex-row-reverse w-100 ">
-                <button type="submit" class="btn btn-primary" formaction="{{url_for('edit')}}?set=2" name="zt"
+                <button type="submit" class="btn btn-primary" formaction="{{url_for('edit')}}?set=1" name="zt"
                         value="run">开始
                 </button>
             </div>
         </div>
-
         {% endif %}
     </form>
 </div>

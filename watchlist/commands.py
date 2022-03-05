@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-import time
 import click
 from datetime import datetime
 from watchlist import app, db, models
-from watchlist.models import User, Movie , Ethusdt1m, Orders
+from watchlist.models import User, Movie
 from watchlist.scrip import bian,command
-import socket
-import struct
+
 
 
 @app.cli.command()

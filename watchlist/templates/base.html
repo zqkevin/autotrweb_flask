@@ -34,16 +34,17 @@
 
     </style>
 </head>
-<body class="bg-light">
+<body class="bg-light container">
+
 <div class="offcanvas offcanvas-start navbar-toggler bg-light" id="menus">
-        <div class="offcanvas-header bg-secondary container-fluid">
-            <h1 class="offcanvas-title text-light mx-auto">菜单</h1>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas" style="font-size: 2em"><</button>
+        <div class="offcanvas-header">
+            <h3 class="offcanvas-title text-light mx-auto"></h3>
+            <button type="button" class="btn btn-light text-secondary" data-bs-dismiss="offcanvas" style="font-size: 2em"><</button>
         </div>
         <div class="offcanvas-body">
             <ul class="navbar-nav">
                 {% if current_user.is_authenticated %}
-                {% if current_user.admin != 0 %}
+                {% if current_user.admin > 0 %}
                 <li class='nav-item'><a class="nav-link" href="{{ url_for('settings') }}">账户设置</a></li>
                 <li class='nav-item'><a class="nav-link" href="{{ url_for('edit') }}">运行设置</a></li>
                 <li class='nav-item'><a class="nav-link" href="{{url_for('orders')}}">交易情况</a></li>
@@ -52,7 +53,6 @@
                 <li class='nav-item'><a class="nav-link" href="{{ url_for('settings') }}">账户设置</a></li>
                 <li class='nav-item'><a class="nav-link" href="{{ url_for('edit') }}">运行设置</a></li>
                 <li class='nav-item'><a class="nav-link" href="{{url_for('orders')}}">交易情况</a></li>
-
                 {% endif %}
                 {% else %}
                 <li class="nav-item dropdown">
@@ -75,31 +75,23 @@
             </ul>
         </div>
     </div>
-<div class=" sticky-top container-fluid bg-white mb-1">
+<div class=" sticky-top container bg-white mb-1">
 <nav class="navbar navbar-expand-lg navbar-light mx-4 ">
     <div class="flex-grow-1" style="">
         <a href="{{ url_for('index') }}">
             <img class="indexlogo" src="../static/images/home.gif" alt="">
         </a>
     </div>
-
-
     <span class="navbar-toggler-icon navbar-toggler navbar-highlight mx-3" data-bs-toggle="offcanvas" data-bs-target="#menus"></span>
-
     <div class="collapse navbar-collapse " id="navbarSupportedContent">
        <ul class="navbar-nav">
                 {% if current_user.is_authenticated %}
-                {% if current_user.admin != 0 %}
+
                 <li class='nav-item'><a class="nav-link" href="{{ url_for('settings') }}">账户设置</a></li>
                 <li class='nav-item'><a class="nav-link" href="{{ url_for('edit') }}">运行设置</a></li>
                 <li class='nav-item'><a class="nav-link" href="{{url_for('orders')}}">交易情况</a></li>
                 <li class='nav-item'><a class="nav-link" href="{{url_for('usermanage')}}">用户管理</a></li>
-                {% else %}
-                <li class='nav-item'><a class="nav-link" href="{{ url_for('settings') }}">账户设置</a></li>
-                <li class='nav-item'><a class="nav-link" href="{{ url_for('edit') }}">运行设置</a></li>
-                <li class='nav-item'><a class="nav-link" href="{{url_for('orders')}}">交易情况</a></li>
 
-                {% endif %}
                 {% else %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="collapse" data-bs-target="#plan3">模式一（有交易账户）</a>
@@ -129,10 +121,10 @@
 
 </nav>
 </div>
-
 <main class="container">
     {{ render_messages(container=False, dismissible=True) }}
 </main>
+
 {% block content %}{% endblock %}
 </body>
 <footer class="text-center">
